@@ -4,7 +4,7 @@
             <p id="nav-one">ele.me</p>
             <div>
                 <router-link to="/login" style="color:white;">
-              <span data-v-cec0c0c0="" class="login_span">登录|注册</span>
+              <span class="login_span">登录|注册</span>
             </router-link>
             </div>
         </nav>
@@ -13,33 +13,41 @@
                 <span>当前定位城市:</span>
                 <span>定位不转时,请在城市列表中选择</span>
             </p>
-            <p id="city-one">郑州</p>
+             <!-- <router-link :to="{'name':'hot','params':{'id':item.id},query:{'location':item.name}}"> -->
+            <p id="city-one">
+              {{city}}
+             <i-icon type="ios-arrow-forward"/>
+             
+            </p>
+               <!-- </router-link> -->
         </div>
            <div id="hotCity">
                 <p id="hot-city-title">热门城市</p> 
-              <Row >
-               
-         <Col span="6" v-for="(item,index) in json" :key="index">
-         <router-link :to="{'name':'hot','params':{'id':item.id},query:{'id':item.id}}">
+              <row-r>        
+         <col-c span="6" v-for="(item,index) in $store.state.City.json" :key="index">
+         <router-link :to="{'name':'hot','params':{'id':item.id,'location':item.name}}">
                {{item.name}}
                </router-link>
-         </Col>
-          
-    </Row>
+         </col-c>      
+    </row-r>
            </div> 
            <div id="content" >                 
                <div id="content-left">
-                   <template v-for="(arrItem,aIndex) in arr" >
+                   <template v-for="(arrItem,aIndex) in $store.state.City.arr" >
                        <p :key="aIndex" :id="arrItem" @click="fn(arrItem)" >
                       {{arrItem}}
                 </p>
                    </template>   
                </div>
-               <div id="content-right" v-for="(arrItems,aIndex) in arr" :ref="arrItems" :key="aIndex" >
+               <div id="content-right" v-for="(arrItems,aIndex) in $store.state.City.arr" :ref="arrItems" :key="aIndex" >
                    <p id="content-t">{{arrItems}}(按字母排序)</p>   
-                  <Row>        
-                  <Col span="6" v-for="(items,indexs) in AllCity[arrItems]" :key="indexs">{{items.name}}</Col>            
-                </Row>                           
+                  <row-r v-for="(itemall,indexall) in $store.state.City.AllCity" :key="indexall">     
+                  <col-c span="6" v-for="(items,indexs) in itemall[arrItems]" :key="indexs">
+                  <router-link :to="{'name':'hot','params':{'id':items.id,'location':items.name}}">
+                  {{items.name}}
+                  </router-link>
+                  </col-c>            
+                </row-r>                           
                </div>
            </div>
     </div>
@@ -47,27 +55,51 @@
 
 <script>
 export default {
+  created:function(){
+        this.$store.dispatch('City/HotCity');
+        // 城市定位
+      var geolocation = new BMap.Geolocation();  
+       let that=this;
+        geolocation.getCurrentPosition(function(r){  
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){  
+                //以指定的经度与纬度创建一个坐标点  
+                var pt = new BMap.Point(r.point.lng,r.point.lat);  
+                //创建一个地理位置解析器  
+                var geoc = new BMap.Geocoder();  
+                geoc.getLocation(pt, function(rs){//解析格式：城市，区县，街道  
+                    var addComp = rs.addressComponents;  
+                     that.city= addComp.city ;
+                     console.log(that.city);
+                });   
+            }  
+            else {  
+                console.log('定位失败');  
+            }          
+        },{enableHighAccuracy: true})//指示浏览器获取高精度的位置，默认false
+      
+    },
+  
   data() {
     return {
-       arr:['A','B','C','D','E','F','G','H','J','K','L','M','N','P','Q','R','S','T','W','X','Y','Z'],
-      json: [],
-      AllCity: []
+      //  arr:['A','B','C','D','E','F','G','H','J','K','L','M','N','P','Q','R','S','T','W','X','Y','Z'],
+      // json: [],
+      // AllCity: [],
+      city:''
     };
   },
-  async created() {
-    this.$Axios.get("https://elm.cangdu.org/v1/cities?type=hot").then(data => {
-      console.log(data.data);
-      this.json = data.data;
-    });
-    // https://elm.cangdu.org/v1/cities?type=group
-    this.$Axios
-      .get("https://elm.cangdu.org/v1/cities?type=group")
-      .then(data => {
-        console.log(data.data);
-        this.AllCity = data.data;
+  // async created() {
+  //   this.$Axios.get("https://elm.cangdu.org/v1/cities?type=hot").then(data => {
+  //     console.log(data.data);
+  //     this.json = data.data;
+  //   });
+  //   // https://elm.cangdu.org/v1/cities?type=group
+  //   this.$Axios
+  //     .get("https://elm.cangdu.org/v1/cities?type=group")
+  //     .then(data => {
+  //       console.log(data.data);
+  //       this.AllCity = data.data;
 
-      });
-  },
+  //     });
   methods:{
       fn(num){
           // console.log(num)
@@ -79,7 +111,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 nav {
   width: 100%;
   overflow: hidden;

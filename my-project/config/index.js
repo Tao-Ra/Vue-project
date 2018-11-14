@@ -11,14 +11,14 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // https://elm.cangdu.org/v1/cities
-      // '/Api':{
-      //   target:'https://elm.cangdu.org',
-      //   changeOrigin:true,
-      //   pathRewrite:{
-      //    '^/Api':'/v1'
-      //   }
-      // }
+      // "E:\My_project\vue_tr\Server-project\index.js"
+      '/Api':{
+        target:'http://localhost:8090',
+        changeOrigin:true,
+        pathRewrite:{
+         '^/Api':'/api'
+        }
+      }
     },
 
     // Various Dev Server settings

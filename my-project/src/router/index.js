@@ -4,6 +4,7 @@ import City from '@/components/city'
 import Login from '@/components/login'
 import Reset from '@/components/reset'
 import Hot from '@/components/hot'
+import Cities from '@/components/cities'
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +18,11 @@ export default new Router({
       path: '/hot/:id',
       name: 'hot',
       component:Hot
+    },
+    {
+      path: '/cities/:id',
+      name: 'cities',
+      component:Cities
     },
     {
       path: '/login',

@@ -5,20 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>my-project</title>
     <link rel="stylesheet" href="/static/reset.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=4IU3oIAMpZhfWZsMu7xzqBBAf6vMHcoa
 "></script>
   </head>
   <body>
     <div id="app">
-      <div id="allmap"></div>
     </div>
     <!-- built files will be auto injected -->
   </body>
 </html>
-<script type="text/javascript">
-  var map = new BMap.Map("allmap");
-  var geolocation = new BMap.Geolocation();
-  geolocation.getCurrentPosition(function(r){
-      alert('您的位置：'+r.point.lng+','+r.point.lat);
-  },{enableHighAccuracy: true})
-</script>

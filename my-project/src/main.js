@@ -3,18 +3,22 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import Jq from 'jquery'
 Vue.prototype.$ajax=Jq;
 
 import Axios from 'axios'
 Vue.prototype.$Axios=Axios
 
-import iView from 'iview';
-Vue.use(iView);
-// import {Anchor, AnchorLin} from 'iview';
+// import iView from 'iview';
+// Vue.use(iView);
+import {Row,Col,Icon,Input,Switch} from 'iview';
 import 'iview/dist/styles/iview.css';
-// Vue.component('anchor', Anchor);
-// Vue.component('anchor-link', AnchorLink);
+Vue.component('row-r',Row);
+Vue.component('col-c', Col);
+Vue.component('i-icon', Icon);
+Vue.component('i-input', Input);
+Vue.component('i-switch', Switch);
 
 
 
@@ -26,6 +30,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<router-view/>'
 })

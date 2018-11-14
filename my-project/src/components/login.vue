@@ -1,16 +1,16 @@
 <template>
     <div>
        <nav>
-      <router-link to="/" style="color:white"> <Icon type="ios-arrow-back" /></router-link>
+      <router-link to="/" style="color:white"> <i-icon type="ios-arrow-back" /></router-link>
         <span>密码登录</span>
        </nav>
        <div id="content">
         <section  class="input_container">
-            <input type="text" placeholder="账号" v-model="user"></section>
+            <input type="text" placeholder="账号" v-model="user" ref="user"></section>
          <section  class="input_container">
-            <input type="password" placeholder="密码" v-model="pass">
+            <input type="password" placeholder="密码" v-model="pass" ref="pass">
             <i-switch size="large">
-                <span slot="open" @click="status">abc</span>
+                <span slot="open" @click="status">abc</span> 
                 <span slot="close" @click="status">c...</span>
             </i-switch>
             </section>
@@ -53,7 +53,7 @@ export default {
         this.$Axios.post('https://elm.cangdu.org/v1/captchas').then((data)=>{
             // console.log(data)
             this.Img=data.data.code;
-        })
+        });     
     },
     methods:{
         fn(){
@@ -73,11 +73,28 @@ export default {
             this.statu=!this.statu;  
         },
         login(){
-            console.log(this)
-
-            // console.log(this.pass)
+           this.$ajax.ajax({
+            type:'POST',
+            url:'/Api',
+            data:{
+                how:'login',
+                user:this.$refs.user.value,
+                pwd:this.$refs.pass.value
+            },
+            dataType: 'json',
+           success(data){
+            if(!data.err){
+                alert('登录成功');
+                location.href='/'
+            }else{
+              alert('错了，'+data.msg);
+            }
+          },
+          error(){
+              alert('登录失败');
+          }
+        })
         }
-     
     },
     watch:{
         user:(val, oldVal)=> {
@@ -115,9 +132,7 @@ nav{
 .ivu-icon{
     float: left;
 }
-#content{
-    /* background-color: gainsboro */
-}
+
 .input_container{
     border-bottom: 1px solid #f1f1f1;
 }
